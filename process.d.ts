@@ -7,5 +7,8 @@ declare namespace NodeJS {
     STRIPE_SUCCESS_URL: string;
     STRIPE_CANCEL_URL: string;
     NEXT_PUBLIC_STRIPE_PUBLIC_KEY: string;
+    STRIPE_WEBHOOK_SECRET: string;
+    PRISMIC_ACCESS_TOKEN: string;
+    PRISMIC_ENDPOINT: string;
   }
 }

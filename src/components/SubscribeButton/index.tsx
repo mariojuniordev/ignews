@@ -1,28 +1,29 @@
 import { api } from "@/services/api";
 import { getStripeJs } from "@/services/stripe-js";
 import { useSession, signIn } from "next-auth/react";
-import Stripe from "stripe";
+import { useRouter } from "next/dist/client/router";
 import styles from "./styles.module.scss";
 
-interface SubscribeButtonProps {
-  priceId: string;
-}
+export function SubscribeButton() {
+  const { data: sessionData } = useSession();
 
-interface StripeResponseData {
-  session: Stripe.Response<Stripe.Checkout.Session>;
-}
-
-export function SubscribeButton({ priceId }: SubscribeButtonProps) {
-  const { data } = useSession();
+  const router = useRouter();
 
   async function handleSubscribe() {
-    if (!data) {
+    if (!sessionData) {
       signIn("github");
       return;
     }
 
+    // @ts-ignore
+    if (sessionData?.activeSubscription) {
+      router.push("/posts");
+
+      return;
+    }
+
     try {
-      const { data } = await api.post<StripeResponseData>("/subscribe");
+      const { data } = await api.post("/subscribe");
 
       const { session } = data;
 
